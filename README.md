@@ -41,6 +41,18 @@ TODO: Complete reference of variables
 - Aynsc tasks support?
 - Jinja template for task names??
 
+## AI usage disclosure
+
+- No LLM-generated code has been commited to this codebase.
+  - LLM may have been used in 2024 and 2025 for debugging RLO;
+    I honestly can't remember whether I used one or not.
+- Some code snippets I did not author have been used.
+  Given the timestamps attached to those snippets, I highly doubt they were LLM-generated;
+  I cannot garantee it, however.
+    - If there ever is doubt, all code snippets I do not author are sourced.
+- If you wish to contribute to this repository, you are welcome to do so;
+  I will not tolerate LLM-generated code, however.
+
 ## Authors
 
 Rich Live Output was created by [ShinySaana](https://github.com/ShinySaana).  
