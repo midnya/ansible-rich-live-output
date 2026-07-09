@@ -43,7 +43,7 @@ TODO: Complete reference of variables
 
 ## AI usage disclosure
 
-- No LLM-generated code has been commited to this codebase.
+- No LLM-generated code has been commited to this codebase (pretty sure it shows, lmao).
   - LLM may have been used in 2024 and 2025 for debugging RLO;
     I honestly can't remember whether I used one or not.
 - Some code snippets I did not author have been used.

@@ -53,7 +53,7 @@ DOCUMENTATION = '''
         env:
           - name: RLO_TRANSFORMER
         vars:
-          - rlo_transformer
+          - name: rlo_transformer
         type: string
 '''
 
