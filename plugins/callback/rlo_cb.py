@@ -264,9 +264,12 @@ class CallbackModule(CallbackBase):
             self._live.start()
 
     def __del__(self):
-        if self._interactive:
-            self.__DEL_STDOUT.write(self.__DEL_CNORM)
-            self.__DEL_STDOUT.flush()
+        try:
+            if self._interactive:
+                self.__DEL_STDOUT.write(self.__DEL_CNORM)
+                self.__DEL_STDOUT.flush()
+        except:
+            pass
 
     def v2_playbook_on_play_start(self, play):
         message = f"[bold] - Playbook - {play.get_name()} -[/bold]"
@@ -533,6 +536,7 @@ class CallbackModule(CallbackBase):
             if key in result and result[key] != '':
                 reduced_result[key] = result[key]
 
+        # TODO: Need to be smarter on loops. The results object can be interesting.
         # Specifically ignore loop's top level `msg` in a reduced result, otherwise print it.
         if "msg" in result and result["msg"] and result["msg"] != "All items completed":
             reduced_result["msg"] = result["msg"]
