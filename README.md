@@ -41,6 +41,35 @@ TODO: Complete reference of variables
 - Aynsc tasks support?
 - Jinja template for task names??
 
+# 1.0?
+
+As it stands, RLO heavily couples this pipeline:
+```
+task info received
+ |
+ v
+task info parsed
+ |
+ v
+decision on whether to print the task or not
+ |
+ v
+task transformed
+ |
+ v
+task printed
+```
+(with probably a bunch of steps being done out of order).
+
+Which means, the ansible process is heavily coupled with its terminal.
+I want `task info parsed` be completely abstracted from the rest of the code.
+I believe the rest of the tasks of this pipeline after that should also be silo-ed.
+
+Specifically, because I used `rich`, I want to play with `textual`,
+and what it could offer in terms of QoL. For that, this decouple has to be done.
+Until then, I won't promote RLO to 1.0.
+
+
 ## AI usage disclosure
 
 - No LLM-generated code has been commited to this codebase (pretty sure it shows, lmao).
