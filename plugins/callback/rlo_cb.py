@@ -46,6 +46,19 @@ DOCUMENTATION = '''
     requirements:
       - set as rlo_cb in configuration
     options:
+      rlo_display_fqdn:
+        description: 
+          - Whether to strip an action's FQDN.
+          - V(full): Display the action name as received.
+          - V(abbreviated): C(ansible.builtin.debug) -> C(a.b.debug).
+          - V(stripped): C(ansible.builtin.debug) -> C(debug).
+        choices: [full, abbreviated, stripped]
+        default: stripped
+        env:
+          - name: RLO_DISPLAY_FQDN
+        vars:
+          - name: rlo_display_fqdn
+        type: string
       rlo_transformer:
         description: A transformer function applied before printing values to the terminal.
             Formatted as "<module>/<class_name>". If "<module>" is empty, `rlo.transformers` is used.
@@ -578,14 +591,41 @@ class CallbackModule(CallbackBase):
         elif 'diff' in result._result and result._result['diff'] and result._result.get('changed', False):
             self._print_single_diff(result._result)
 
+    def _format_task_name(self, task):
+        fqdn_display = self.get_option("rlo_display_fqdn")
+        action = task.action
+
+        if fqdn_display == "full":
+            # No transform is needed
+            pass
+        elif fqdn_display == "stripped":
+            # Keep the last part of the FQDN
+            action = action.split(".")[-1]
+        elif fqdn_display == "abbreviated":
+            # Abbreivate the FQDN, *a la* Java's loggers package name shortening
+            split_action = action.split(".")
+            last_part = split_action.pop()
+
+            action = ""
+            for part in split_action:
+                if len(part):
+                    action += part[0] + "."
+            action += last_part
+        else:
+            raise ValueError("`rlo_display_fqdn` option is not recognized!")
+
+
+        if task.name:
+            task_desc = f"[italic]{action}[/italic] - {task.name}"
+        else:
+            task_desc = f"[italic]{action}[/italic]"
+
+        return task_desc
+
     def _get_task_infos(self, host, task):
         host_name = host.get_name()
         host_label = CallbackModule._get_host_label(host, task)
-        if task.name:
-            task_desc = f"[italic]{task.action}[/italic] - {task.name}"
-        else:
-            task_name = task.action
-            task_desc = f"[italic]{task_name}[/italic]"
+        task_desc = self._format_task_name(task)
 
         if CallbackModule._is_task_handler(task):
             task_desc = f"{task_desc} - [bold]handler[/bold]"
