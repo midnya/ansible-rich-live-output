@@ -84,7 +84,7 @@ Until then, I won't promote RLO to 1.0.
 
 ## Authors
 
-Rich Live Output was created by [ShinySaana](https://github.com/ShinySaana).  
+Rich Live Output was created by [Midnya](https://github.com/midnya).  
 Some code snippets were sourced from [community.general](https://github.com/ansible-collections/community.general)'s [`yaml` callback plugin](https://github.com/ansible-collections/community.general/blob/main/plugins/callback/yaml.py).
 
 ## License

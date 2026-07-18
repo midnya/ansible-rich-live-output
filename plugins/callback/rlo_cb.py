@@ -12,7 +12,7 @@ import time
 import rich
 import yaml
 
-from ansible_collections.shinysaana.rlo.plugins.module_utils.transformers import init_transformer, get_transform_callback
+from ansible_collections.midnya.rlo.plugins.module_utils.transformers import init_transformer, get_transform_callback
 
 from ansible.executor.task_result import TaskResult
 from ansible.inventory.host import Host
@@ -35,7 +35,7 @@ from rich.console import Console
 
 
 DOCUMENTATION = '''
-    author: ShinySaana <shinysaana@gmail.com>
+    author: Midnya <github@midnya.cat>
     name: rlo_cb
     type: stdout
     short_description: Rich Live Output
@@ -80,7 +80,7 @@ def get_yaml_string_from_result(result):
 
     return dumped
 
-## ShinySaana: I'm not going to pretend I understand why the below is needed.
+## Midnya: I'm not going to pretend I understand why the below is needed.
 ## This has been taken from community.general.yaml some time after ansible-core 2.19 released.
 ## Adapated to fit RLO's use case.
 try:
@@ -199,7 +199,7 @@ class CallbackModule(CallbackBase):
         self._transformer_user = None
         self._transformer_user_callback = None
 
-        self._transformer_sanitizer = init_transformer("ansible_collections.shinysaana.rlo.plugins.module_utils.transformers", "Sanitizer")
+        self._transformer_sanitizer = init_transformer("ansible_collections.midnya.rlo.plugins.module_utils.transformers", "Sanitizer")
         self._transformer_sanitizer_callback = get_transform_callback(self._transformer_sanitizer)
 
         self._hosts = {}
@@ -655,7 +655,7 @@ class CallbackModule(CallbackBase):
             potential_transformer_name = parts[1]
 
             if potential_transformer_module == "":
-                potential_transformer_module = "ansible_collections.shinysaana.rlo.plugins.module_utils.transformers"
+                potential_transformer_module = "ansible_collections.midnya.rlo.plugins.module_utils.transformers"
             else:
                 # Allow users to import their own Transformer relative to the execution directory.
                 # I'm not aware of any better alternative?
