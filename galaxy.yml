@@ -12,10 +12,12 @@ repository: https://github.com/midnya/ansible-rich-live-output
 license_file: ./COPYING
 build_ignore:
   - .ansible
+  - .git
   - .vscode
+  - playbooks
+  - venv
+  - .gitignore
   - ansible.cfg
   - main.yml
   - main.py
-  - playbooks
   - requirements.dev.txt
-  - venv
