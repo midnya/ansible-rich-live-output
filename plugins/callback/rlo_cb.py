@@ -534,6 +534,21 @@ class CallbackModule(CallbackBase):
 
         return comprehensive_result
 
+    def _get_inner_reduced_result_object(self, result):
+        reduced_result = {}
+
+        for key in ["stdout", "stderr"]:
+            if key in result and result[key] != '':
+                reduced_result[key] = result[key]
+
+        # Probably an interesting thing to print
+        if "msg" in result and result["msg"]:
+            # These aren't, though
+            if result["msg"] != "All items completed" and result["msg"] != "All items skipped":
+                reduced_result["msg"] = result["msg"]
+
+        return reduced_result
+
     # Returns a small object containing some information to debug a task.
     # Expected to be printed for each and every task, regardless of its status (ok, changed, failed, etc) on a medium verbosity.
     # Only prints msg, stdout, stderr, and task vars.
@@ -545,14 +560,22 @@ class CallbackModule(CallbackBase):
 
         reduced_result = {}
 
-        for key in ["stdout", "stderr"]:
-            if key in result and result[key] != '':
-                reduced_result[key] = result[key]
+        if "results" in result:
+            accumulator = []
 
-        # TODO: Need to be smarter on loops. The results object can be interesting.
-        # Specifically ignore loop's top level `msg` in a reduced result, otherwise print it.
-        if "msg" in result and result["msg"] and result["msg"] != "All items completed":
-            reduced_result["msg"] = result["msg"]
+            for inner_result in result["results"]:
+                # Only add an entry to the printable list if it contains anything
+                maybe_reduced_result = self._get_inner_reduced_result_object(inner_result)
+                if maybe_reduced_result == {}:
+                    continue
+                accumulator.append(maybe_reduced_result)
+
+            # Only print the results if there's anything to print
+            if accumulator:
+                reduced_result["results"] = accumulator
+
+
+        reduced_result = reduced_result | self._get_inner_reduced_result_object(result)
 
         # Add task vars (those defined specifically at the task level) if there are some.
         if task.vars:
